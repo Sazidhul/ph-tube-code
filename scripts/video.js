@@ -9,14 +9,14 @@ function getTimeString(time) {
   remainingSecond = remainingSecond % 60;
   return `${hour} hour ${minute} minute ${remainingSecond} second ago`;
 }
-// Removing active class 
+
+// remove Class color form the button function condition 
 const removeActiveClass = () => {
   const buttons = document.getElementsByClassName("category-btn");
-  console.log(buttons);
-  for(let btn of buttons) {
-    btn.classList.remove("active");
+  // console.log(buttons);
+  for(let btn of buttons){
+    btn.classList.remove("active")
   }
-
 };
 
 // 1- fetch, Load and Show Categories on html
@@ -36,12 +36,13 @@ const loadCategoryVideos = (id) => {
   fetch(`https://openapi.programming-hero.com/api/phero-tube/category/${id}`)
     .then((res) => res.json())
     .then((data) => {
-      // sobaike active Class remove korea
+      // sobaike active remove korao
         removeActiveClass();
-      // id er class K avtive korao
+      // id er class K active Korao
       const activeBtn = document.getElementById(`btn-${id}`);
-      activeBtn.classList.add("active");
-      displayVideos(data.category)} )
+      activeBtn.classList.add("active")
+      displayVideos(data.category);
+    })
     .catch((error) => console.log(error));
 };
 
@@ -111,7 +112,6 @@ const displayVideos = (videos) => {
         </h2>
     </div>
     `;
-  
   } else {
     videoContainer.classList.add("grid");
   }
