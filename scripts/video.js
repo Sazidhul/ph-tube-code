@@ -10,12 +10,12 @@ function getTimeString(time) {
   return `${hour} hour ${minute} minute ${remainingSecond} second ago`;
 }
 
-// remove Class color form the button function condition 
+// remove Class color form the button function condition
 const removeActiveClass = () => {
   const buttons = document.getElementsByClassName("category-btn");
   // console.log(buttons);
-  for(let btn of buttons){
-    btn.classList.remove("active")
+  for (let btn of buttons) {
+    btn.classList.remove("active");
   }
 };
 
@@ -30,6 +30,8 @@ const loadCategories = () => {
     .catch((error) => console.log(error));
 };
 
+
+
 // function for the DisplayCategories
 const loadCategoryVideos = (id) => {
   // alert(id);
@@ -37,14 +39,36 @@ const loadCategoryVideos = (id) => {
     .then((res) => res.json())
     .then((data) => {
       // sobaike active remove korao
-        removeActiveClass();
+      removeActiveClass();
       // id er class K active Korao
       const activeBtn = document.getElementById(`btn-${id}`);
-      activeBtn.classList.add("active")
+      activeBtn.classList.add("active");
       displayVideos(data.category);
     })
     .catch((error) => console.log(error));
 };
+
+// Creating Function For Details
+const loadDetails = async(videoId) =>{
+   const uri = `https://openapi.programming-hero.com/api/phero-tube/video/${videoId}`;
+   const res = await fetch(uri);
+   const data =await res.json();
+   displayDetails(data.video);
+} 
+    // Creating A Function for Displaying The Details 
+const displayDetails=(video) =>{
+  console.log(video);
+  const detailContainer = document.getElementById("modal-content");
+
+  detailContainer.innerHTML=`
+  <img src="${video.thumbnail}"/>
+  <p>${video.description}</p>
+  `
+  // way-1
+  // document.getElementById("showModalData").click();
+  // way-2
+  document.getElementById("customModal").showModal();
+}
 
 // Create DisplayCategories
 const displayCategories = (categories) => {
@@ -129,9 +153,8 @@ const displayVideos = (videos) => {
       ${
         video.others.posted_date?.length == 0
           ? ""
-          : ` <span class="absolute text-xs right-2 bottom-2 bg-black text-white rounded p-1 ">${getTimeString(
-              video.others.posted_date
-            )}</span>`
+          : ` <span class="absolute text-xs right-2 bottom-2 bg-black text-white rounded p-1 ">
+          ${getTimeString(video.others.posted_date)}</span>`
       }
      
   </figure>
@@ -153,12 +176,9 @@ const displayVideos = (videos) => {
             : ""
         }
         
-      
-     
+
       </div>
-
-      <p> </p>
-
+      <p> <button onclick="loadDetails('${video.video_id}')" class="btn btn-sm btn-error">details</button> </p>
     </div>
   </div>
     `;
