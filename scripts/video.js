@@ -9,6 +9,15 @@ function getTimeString(time) {
   remainingSecond = remainingSecond % 60;
   return `${hour} hour ${minute} minute ${remainingSecond} second ago`;
 }
+// Removing active class 
+const removeActiveClass = () => {
+  const buttons = document.getElementsByClassName("category-btn");
+  console.log(buttons);
+  for(let btn of buttons) {
+    btn.classList.remove("active");
+  }
+
+};
 
 // 1- fetch, Load and Show Categories on html
 
@@ -26,7 +35,13 @@ const loadCategoryVideos = (id) => {
   // alert(id);
   fetch(`https://openapi.programming-hero.com/api/phero-tube/category/${id}`)
     .then((res) => res.json())
-    .then((data) => displayVideos(data.category))
+    .then((data) => {
+      // sobaike active Class remove korea
+        removeActiveClass();
+      // id er class K avtive korao
+      const activeBtn = document.getElementById(`btn-${id}`);
+      activeBtn.classList.add("active");
+      displayVideos(data.category)} )
     .catch((error) => console.log(error));
 };
 
@@ -41,7 +56,7 @@ const displayCategories = (categories) => {
 
     const buttonContainer = document.createElement("div");
     buttonContainer.innerHTML = `
-      <button onclick="loadCategoryVideos(${item.category_id})" class="btn">
+      <button id="btn-${item.category_id}" onclick="loadCategoryVideos(${item.category_id})" class="btn category-btn">
       ${item.category}
       </button>
     `;
@@ -83,10 +98,11 @@ const cardDemo = {
 
 const displayVideos = (videos) => {
   const videoContainer = document.getElementById("video");
-  videoContainer.classList.remove("grid");
+
   videoContainer.innerHTML = "";
 
   if (videos.length == 0) {
+    videoContainer.classList.remove("grid");
     videoContainer.innerHTML = `
     <div class= "min-h-[300px] flex flex-col gap-5 justify-center items-center">
         <img src="assets/Icon.png"/>
@@ -95,9 +111,9 @@ const displayVideos = (videos) => {
         </h2>
     </div>
     `;
-    return;
-  }else{
-    videoContainer.innerHTML.classList.add("grid");
+  
+  } else {
+    videoContainer.classList.add("grid");
   }
 
   videos.forEach((video) => {
